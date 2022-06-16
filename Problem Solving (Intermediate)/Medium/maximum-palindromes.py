@@ -24,7 +24,6 @@ def fermat_binom(n: int, k: int, p: int):
     # numerator * denominator^(p-2) (mod p)
     return (num * pow(denom, p - 2, p)) % p
 
-
 # Using Fermat's little theorem to pre-compute factorials and inverses
 # Note: only works when p is prime and k < p
 def fermat_compute(n, p):
