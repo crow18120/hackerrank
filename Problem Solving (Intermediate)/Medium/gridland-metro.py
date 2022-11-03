@@ -17,20 +17,40 @@ def merge2Track(primary: list, secondary: list):
 def gridlandMetro(n, m, k, tracks):
     # Write your code here
     total = n * m
+    if k == 0:
+        return total
     tracks.sort(key=lambda x: x[0])
+    print(tracks)
     listTracks = []
     rowTracks = [tracks[0][1:]]
-    for i in range(1, len(tracks)):
-        if tracks[i][0] != tracks[i-1][0]:
+    for i in range(1, k):
+        if tracks[i][0] != tracks[i - 1][0]:
             listTracks.append(rowTracks)
             rowTracks = [tracks[i][1:]]
             continue
         compareTrack = tracks[i][1:]
+        newRowTracks = []
+        isAddCompareTrack = False
         for j in range(len(rowTracks)):
-            mergeTrack, isSmaller = merge2Track(rowTracks[i], compareTrack)
-            if not mergeTrack and isSmaller:
-                rowTracks = rowTracks[:j] + [compareTrack] + rowTracks[j:]
+            mergeTrack, isSmaller = merge2Track(rowTracks[j], compareTrack)
+            if not mergeTrack:
+                if isSmaller:
+                    newRowTracks += [compareTrack] + rowTracks[j:]
+                    isAddCompareTrack = True
+                    break
+                else:
+                    newRowTracks.append(rowTracks[j])
             if mergeTrack:
-                rowTracks[j] = mergeTrack
+                compareTrack = mergeTrack
+        if not isAddCompareTrack:
+            newRowTracks += [compareTrack]
+        rowTracks = newRowTracks
+    listTracks.append(rowTracks)
 
-print(merge2Track([8, 10], [1, 2]))
+    for rowTracks in listTracks:
+        for track in rowTracks:
+            total -= track[1] - track[0] + 1
+    return total
+
+
+gridlandMetro(4, 4, 3, [[2, 2, 3], [3, 1, 4], [4, 4, 4]])
